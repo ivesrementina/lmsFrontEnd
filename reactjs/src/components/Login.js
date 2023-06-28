@@ -1,4 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from './api/axios';
 import "./Login.css";
 
 const Login = () => {
@@ -20,10 +22,22 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(user, pwd);
+    try {
+      const response = await axios.post(JSON.stringify({user, pwd}), 
+      {
+        headers: { 'Content-Type': 'application/json'},
+        withCredentials: true
+      } );
+    console.log(JSON.stringify(response?.data));
+    const accessToken = response?.data?.accessToken;
+    const roles = response?.data?.roles;
     setUser('');
     setPwd('');
     setSuccess(true);
+    } catch (err) {
+
+    }
+    
   }
 
   return (
